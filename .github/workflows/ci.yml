@@ -1,0 +1,39 @@
+# ============================================================
+# ci.yml — Tier 1 de `shared`: valida que los tipos compartidos compilan.
+#
+# Es el contrato que consume `live-now-api` (importa `../../../shared/events`),
+# así que un cambio de tipos incompatible debe fallar aquí antes de llegar al
+# backend. Sin dependencias ni lockfile: se usa TypeScript vía npx.
+#
+# Equivalente local: npx -p typescript@5.9.2 tsc --noEmit --strict --target es2022 --module es2022 events.ts
+# Detalle: live-now-music/.clinerules/46-ci.md
+# ============================================================
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  types:
+    name: shared · tsc --noEmit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: TypeScript (events.ts)
+        run: npx -y -p typescript@5.9.2 tsc --noEmit --strict --target es2022 --module es2022 events.ts
