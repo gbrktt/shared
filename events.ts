@@ -39,3 +39,4 @@ export interface AddFavoriteBody {
 export interface AddFavoriteResponse {
   id: string;
 }
+export const BROKEN: number = "esto no es un número";
