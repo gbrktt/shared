@@ -18,6 +18,15 @@ export interface AppEvent {
   distance_km?: number | null;
   images?: string[] | null;
   external_url?: string | null;
+  /**
+   * Confianza multi-fuente (aditivo, Fase 2 · diferenciación):
+   *   · `sources_count` — nº de fuentes independientes que confirman el evento
+   *     (1 = una sola fuente; ≥2 = verificado en varias).
+   *   · `last_verified_at` — ISO de la última confirmación por una fuente.
+   * Ambos opcionales para no romper clientes antiguos ni los tests de contrato.
+   */
+  sources_count?: number | null;
+  last_verified_at?: string | null;
 }
 
 export type TimeRange = 'now' | 'tonight';
